@@ -1,8 +1,10 @@
 ### Online Bookstore Management System 
+
 **Project Overview:** 
 Create a comprehensive online bookstore management system. This system will manage the 
 bookstore's inventory, allow customers to browse and purchase books, and provide administrative 
 functionalities for inventory management and sales tracking. 
+
 **Features to Include:** 
 1. **User Roles:** Differentiate between admin, employees (managers, staff), and customers. 
 2. **Book Inventory Management:** Add, update, and delete books in the inventory with details 
@@ -18,6 +20,7 @@ orders, and manage customer information.
 easy browsing. 
 8. **Payment Integration:** Integrate a payment gateway to process customer transactions 
 securely. 
+
 **Basic Logic Steps:** 
 1. **Design and Planning (2-3 days):** 
  - Define the project requirements, functionalities, and user roles. 
@@ -44,6 +47,7 @@ checkout process.
  - Test the entire system thoroughly, including user workflows and edge cases. 
  - Refactor code for optimization and improvements. 
  - Deploy the application to a server or cloud platform. 
+
 **Tips for Success:** 
 - Plan and prioritize tasks based on dependencies and complexity. 
 - Break down complex features into smaller, manageable tasks. 
