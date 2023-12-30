@@ -5,7 +5,7 @@
     use PHPMailer\PHPMailer\Exception;
 
     include 'db.php';
-	
+
     $_POST = json_decode(file_get_contents('php://input'), true);
 
 	$response = array();
@@ -13,10 +13,10 @@
     $fname = mysqli_real_escape_string($con, $_POST['fname']);
     $lname =  mysqli_real_escape_string($con, $_POST['lname']);
     $email = mysqli_real_escape_string($con, $_POST['email']);
-    $phone = mysqli_real_escape_string($con, $_POST['phone']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
-    $gender = mysqli_real_escape_string($con, $_POST['gender']);
-    $dob = mysqli_real_escape_string($con, $_POST['dob']);
+    // $phone = mysqli_real_escape_string($con, $_POST['phone']);
+    // $gender = mysqli_real_escape_string($con, $_POST['gender']);
+    // $dob = mysqli_real_escape_string($con, $_POST['dob']);
 
 	if ($fname != '' && $lname != '' && $email != '' && $password != '') {
         $sql = "SELECT * FROM users WHERE email = '$email'";
@@ -24,7 +24,7 @@
         $numrow = mysqli_num_rows($result);
 
         if($numrow == 0) {
-            $sql2 = "INSERT INTO set fname = '$fname', lname = '$lname', email = '$email', phone = '$phone', password = '".md5($password)."', gender = '$gender', dob = '$dob'";
+            $sql2 = "INSERT INTO users set fname = '$fname', lname = '$lname', email = '$email', password = '".md5($password)."'";
             $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
             $inserted_id = mysqli_insert_id($con);
 
@@ -35,7 +35,8 @@
                     $mail->SMTPDebug = 2;									
                     $mail->isSMTP();										
                     $mail->Host	 = 'smtp.gmail.com';				
-                    $mail->SMTPAuth = true;							
+                    $mail->SMTPAuth = true;
+                    $mail->SMTPDebug = 0;		
                     $mail->Username = 'bhavanshu.programer@gmail.com';				
                     $mail->Password = 'ompb hlaz gbgd fnfp';			
                     $mail->SMTPSecure = 'tls';							
@@ -57,7 +58,7 @@
                             <h2>Hello, $fname</h2>
                             <h3>Welcome to Online Book Store Managment System</h3>
                             <h4>Click on below link for varification</h4>
-                            <a href='http://localhost/book-store/backend/email-verfification.php?id=$inserted_id&uid=".md5($email)."'>http://localhost/book-store/backend/email-verfification.php?id=$inserted_id&uid=".md5($email)."</a>
+                            <a href='".$frontend_url."/email-verification/$inserted_id".md5($email)."'>".$frontend_url."/email-verification/$inserted_id".md5($email)."</a>
                             <p>If link is failed to open in browser, try to copy and paste link in browser.</p>
                         </center>
                     </body>
