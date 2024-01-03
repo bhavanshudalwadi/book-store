@@ -22,6 +22,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import Box from '@mui/material/Box';
 import ClearAllRoundedIcon from '@mui/icons-material/ClearAllRounded';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { useCartContext } from '../contexts/CartContext';
 
 const drawerWidth = 240;
 
@@ -31,6 +32,7 @@ const Navbar = (props) => {
     const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const { user } = useUserContext();
+    const { cartCount, getCartCount } = useCartContext();
 
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
@@ -44,6 +46,10 @@ const Navbar = (props) => {
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+    React.useEffect(() => {
+        getCartCount();
+    }, [])
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>

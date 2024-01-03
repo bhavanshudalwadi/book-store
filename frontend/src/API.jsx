@@ -86,6 +86,22 @@ export function deleteBook(data) {
 }
 
 // Home Books
-export function fetchHomeBooks() {
-    return axiosInstance.get(`home.php`);
+export function fetchHomeBooks(data) {
+    if(data?.user_id != '') {
+        return axiosInstance.post(`home.php`, data);
+    }else {
+        return axiosInstance.get(`home.php`);
+    }
+}
+
+export function addOrRemoveWishlist(data) {
+    return axiosInstance.post(`add-remove-wishlist.php`, data);
+}
+
+export function addOrUpdateOrRemoveCart(data) {
+    return axiosInstance.post(`add-update-remove-cart.php`, data);
+}
+
+export function fetchCartCount(data) {
+    return axiosInstance.post(`cart-count.php`, data);
 }

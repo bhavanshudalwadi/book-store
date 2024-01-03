@@ -4,8 +4,25 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import { useUserContext } from '../contexts/UserContext';
+import { useBookContext } from '../contexts/BookContext';
 
 const Book = ({ book }) => {
+    const { user } = useUserContext();
+    const { addOrRemoveToWishlist, addOrUpdateOrRemoveFromCart } = useBookContext();
+
+    const handleAddOrRemoveWishlist = (book_id) => {
+        addOrRemoveToWishlist(book_id);
+    }
+
+    const handleAddToCart = (book_id) => {
+        addOrUpdateOrRemoveFromCart(book_id, "INSERT");
+    }
+
+    const handleUpdateCart = (book_id, mode) => {
+        addOrUpdateOrRemoveFromCart(book_id, mode);
+    }
+
     return (
         <Card sx={{ width: 150, margin: '10px 5px' }} variant='outlined'>
             <CardActionArea>
@@ -26,9 +43,9 @@ const Book = ({ book }) => {
                         <span style={{ textDecoration: 'line-through' }}>₹ {book.mrp}</span> <Chip style={{ backgroundColor: '#e5f7ee', color: '#03753c', fontWeight: 700 }} size="small" label={`${Math.round(100 - ((book.price * 100) / book.mrp))}% OFF`} />
                     </Typography>
                 </CardContent>
-                {false ?
-                    <FavoriteRoundedIcon style={{ position: 'absolute', top: 0, right: 0, color: 'red' }} onClick={() => alert('Favorite')} />
-                    : <FavoriteBorderRoundedIcon style={{ position: 'absolute', top: 0, right: 0, color: '#555' }} onClick={() => alert('Favorite')} />
+                {user != null && book.in_wishlist ?
+                    <FavoriteRoundedIcon style={{ position: 'absolute', top: 0, right: 0, color: 'red' }} onClick={() => handleAddOrRemoveWishlist(book.id)} />
+                    : <FavoriteBorderRoundedIcon style={{ position: 'absolute', top: 0, right: 0, color: '#555' }} onClick={() => handleAddOrRemoveWishlist(book.id)} />
                 }
             </CardActionArea>
             {/* <p>
@@ -36,18 +53,18 @@ const Book = ({ book }) => {
           </p> */}
             <CardActions>
                 {
-                    (0 > 0) ?
+                    user != null && book.in_cart > 0 ?
                         <>
-                            <IconButton aria-label="add" color="primary" size="small" style={{ border: '1px solid rgba(25, 118, 210, 0.5)', marginRight: 8 }}>
-                                <AddIcon />
-                            </IconButton>
-                            <span style={{ padding: '3px 5px' }}>{0}</span>
-                            <IconButton aria-label="remove" color="primary" size="small" style={{ border: '1px solid rgba(25, 118, 210, 0.5)' }}>
+                            <IconButton aria-label="remove" color="primary" size="small" style={{ border: '1px solid rgba(25, 118, 210, 0.5)' }} onClick={() => handleUpdateCart(book.id, "REMOVE")}>
                                 <RemoveIcon />
+                            </IconButton>
+                            <span style={{ padding: '3px 5px' }}>{book.in_cart}</span>
+                            <IconButton aria-label="add" color="primary" size="small" style={{ border: '1px solid rgba(25, 118, 210, 0.5)', marginRight: 8 }} onClick={() => handleUpdateCart(book.id, "ADD")}>
+                                <AddIcon />
                             </IconButton>
                         </>
                         :
-                        <Button sx={{ borderRadius: 20, justifyContent: 'space-between', fontSize: 12 }} size="small" color="primary" variant='outlined' fullWidth endIcon={<AddIcon />}>Add to Cart</Button>
+                        <Button sx={{ borderRadius: 20, justifyContent: 'space-between', fontSize: 12 }} size="small" color="primary" variant='outlined' fullWidth endIcon={<AddIcon />} onClick={() => handleAddToCart(book.id)}>Add to Cart</Button>
                 }
             </CardActions>
         </Card>

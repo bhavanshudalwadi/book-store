@@ -1,9 +1,15 @@
 <?php 
     include 'db.php';
 
+    $_POST = json_decode(file_get_contents('php://input'), true);
+
     $response = array();
     $detail = array();
     $response['data'] = array();
+
+    if(isset($_POST['user_id'])) {
+        $user_id = mysqli_real_escape_string($con, $_POST['user_id']);
+    }
     
     // $sql = "SELECT c.*, c.id as cat_id, b.*, b.id as book_id FROM categories c, books b where FIND_IN_SET(c.name, b.cat_ids) > 0";
     $sql = "SELECT * FROM categories";
@@ -11,13 +17,22 @@
     $numrow = mysqli_num_rows($result);
     
     if($numrow > 0) {
-        
         while($row = mysqli_fetch_array($result)) {
-            
             $detail['id'] = (int)$row['id'];
             $detail['name'] = $row['name'];
             
-            $sql2 = "SELECT * FROM books where FIND_IN_SET('".$row['name']."', cat_ids) > 0";
+            if(isset($user_id)) {
+                $sql2 = "SELECT
+                            b.*,
+                            CASE WHEN w.book_id IS NOT NULL THEN 1 ELSE 0 END AS in_wishlist,
+                            CASE WHEN c.book_id IS NOT NULL THEN c.qty ELSE 0 END AS in_cart
+                        FROM books b
+                        left join wishlist w on w.book_id = b.id and w.user_id = $user_id
+                        left join cart c on c.book_id = b.id and c.user_id = $user_id
+                        where FIND_IN_SET('".$row['name']."', b.cat_ids) > 0 order by b.id";
+            }else {
+                $sql2 = "SELECT b.* FROM books b where FIND_IN_SET('".$row['name']."', b.cat_ids) > 0 order by b.id";
+            }
             $result2 = mysqli_query($con, $sql2);
             $numrow2 = mysqli_num_rows($result2);
             
@@ -38,6 +53,11 @@
                     $bookDetails['lang'] = $row2['lang'];
                     $bookDetails['isbn'] = $row2['isbn'];
                     $bookDetails['active_status'] = (int)$row2['active_status'];
+
+                    if(isset($user_id)) {
+                        $bookDetails['in_wishlist'] = ($row2['in_wishlist'] == 1)?true:false;
+                        $bookDetails['in_cart'] = (int)$row2['in_cart'];
+                    }
         
                     $sql3 = "SELECT * FROM book_imgs where id = ".$row2['id'];
                     $result3 = mysqli_query($con, $sql3);

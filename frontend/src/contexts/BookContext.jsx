@@ -1,13 +1,15 @@
 import React, { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "./GlobalContext";
-import { createBook, deleteBook, fetchBooks, fetchBook, updateBook, fetchHomeBooks } from "../API";
+import { createBook, deleteBook, fetchBooks, fetchBook, updateBook, fetchHomeBooks, addOrRemoveWishlist, addOrUpdateOrRemoveCart } from "../API";
+import { useUserContext } from "./UserContext";
 
 const bookContext = createContext();
 
 export const BookState = ({ children }) => {
     const navigate = useNavigate();
     const { setAlert, setLoading, dialog, setDialog } = useGlobalContext();
+    const { user } = useUserContext();
 
     const [books, setBooks] = useState([]);
     const [homeBooks, setHomeBooks] = useState([]);
@@ -149,7 +151,7 @@ export const BookState = ({ children }) => {
 
     const getHomeBooks = () => {
         setLoading(true);
-        fetchHomeBooks()
+        fetchHomeBooks({ user_id: user != null?user.id:'' })
             .then((res) => {
                 setLoading(false);
                 if(res.data.success) {
@@ -161,6 +163,44 @@ export const BookState = ({ children }) => {
             .catch((error) => {
                 setLoading(false);
                 setAlert({ type: "error", msg: "Failed to get books" });
+                console.log(error);
+            });
+    }
+
+    const addOrRemoveToWishlist = (book_id) => {
+        setLoading(true);
+        addOrRemoveWishlist({ user_id: user?.id, book_id })
+            .then((res) => {
+                setLoading(false);
+                if(res.data.success) {
+                    setAlert({ type: "success", msg: res.data.msg });
+                    getHomeBooks();
+                }else {
+                    setAlert({ type: "error", msg: res.data.msg });
+                }
+            })
+            .catch((error) => {
+                setLoading(false);
+                setAlert({ type: "error", msg: "Wishlist operation failed." });
+                console.log(error);
+            });
+    }
+
+    const addOrUpdateOrRemoveFromCart = (book_id, mode) => {
+        setLoading(true);
+        addOrUpdateOrRemoveCart({ user_id: user?.id, book_id, mode })
+            .then((res) => {
+                setLoading(false);
+                if(res.data.success) {
+                    setAlert({ type: "success", msg: res.data.msg });
+                    getHomeBooks();
+                }else {
+                    setAlert({ type: "error", msg: res.data.msg });
+                }
+            })
+            .catch((error) => {
+                setLoading(false);
+                setAlert({ type: "error", msg: "Cart operation failed." });
                 console.log(error);
             });
     }
@@ -179,7 +219,9 @@ export const BookState = ({ children }) => {
                 removeBook,
                 homeBooks,
                 setHomeBooks,
-                getHomeBooks
+                getHomeBooks,
+                addOrRemoveToWishlist,
+                addOrUpdateOrRemoveFromCart
             }}
         >
             { children }
