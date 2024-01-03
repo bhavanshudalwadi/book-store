@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../contexts/UserContext';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import { Container, ListItemIcon, Menu, MenuItem } from '@mui/material';
+import { Badge, Container, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import PlaceRoundedIcon from '@mui/icons-material/PlaceRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
@@ -129,7 +129,9 @@ const Navbar = (props) => {
                                     :''
                                 }
                                 <IconButton aria-label="cart" size="large">
-                                    <ShoppingCartIcon htmlColor='#fff' fontSize="inherit" />
+                                    <Badge badgeContent={cartCount} color="error">
+                                        <ShoppingCartIcon htmlColor='#fff' fontSize="inherit" />
+                                    </Badge>
                                 </IconButton>
                                 {user != null ?
                                 <>

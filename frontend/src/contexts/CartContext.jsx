@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { useGlobalContext } from "./GlobalContext";
 import { useUserContext } from "./UserContext";
+import { fetchCartCount } from "../API";
 
 const cartContext = createContext();
 
@@ -12,7 +13,7 @@ export const CartState = ({ children }) => {
 
     const getCartCount = () => {
         setLoading(true);
-        fetchProfile({ user_id: user?.id })
+        fetchCartCount({ user_id: user?.id })
             .then((res) => {
                 setLoading(false);
                 if(res.data.success) {

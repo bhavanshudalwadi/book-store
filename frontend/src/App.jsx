@@ -8,6 +8,7 @@ import { UserState } from './contexts/UserContext';
 import { CategoryState } from './contexts/CategoryContext';
 import AlertDialog from './components/AlertDialog';
 import { BookState } from './contexts/BookContext';
+import { CartState } from './contexts/CartContext';
 
 const App = () => {
   return (
@@ -17,13 +18,15 @@ const App = () => {
           <UserState>
             <CategoryState>
               <BookState>
+                <CartState>
 
-                <Navbar />
-                <MainNavigation />
-                <Loader />
-                <AlertMessage />
-                <AlertDialog />
-
+                  <Navbar />
+                  <MainNavigation />
+                  <Loader />
+                  <AlertMessage />
+                  <AlertDialog />
+                  
+                </CartState>
               </BookState>
             </CategoryState>
           </UserState>
