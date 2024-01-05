@@ -17,17 +17,17 @@ const App = () => {
         <GlobalState>
           <UserState>
             <CategoryState>
-              <BookState>
-                <CartState>
+              <CartState>
+                <BookState>
 
                   <Navbar />
                   <MainNavigation />
                   <Loader />
                   <AlertMessage />
                   <AlertDialog />
-                  
-                </CartState>
-              </BookState>
+
+                </BookState>
+              </CartState>
             </CategoryState>
           </UserState>
         </GlobalState>

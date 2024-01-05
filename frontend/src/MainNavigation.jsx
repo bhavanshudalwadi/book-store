@@ -11,6 +11,7 @@ import EditCategory from './pages/EditCategory';
 import CategoryList from './pages/CategoryList';
 import EditBook from './pages/EditBook';
 import BookList from './pages/BookList';
+import Cart from './pages/Cart';
 
 const MainNavigation = () =>{
     const { user } = useUserContext();
@@ -24,6 +25,7 @@ const MainNavigation = () =>{
             
             <Route path="/profile" element={user ? <Profile /> : RedirectLogin}/>
             <Route path="/addresses" element={user ? <Addresses /> : RedirectLogin}/>
+            <Route path="/cart" element={user ? <Cart /> : RedirectLogin}/>
 
             <Route path="/categories" element={user && (user.role === 2 || user.role === 1) ? <CategoryList /> : RedirectLogin}/>
             <Route path="/add-category" element={user && (user.role === 2 || user.role === 1) ? <EditCategory /> : RedirectLogin}/>

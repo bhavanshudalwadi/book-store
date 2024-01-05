@@ -105,3 +105,7 @@ export function addOrUpdateOrRemoveCart(data) {
 export function fetchCartCount(data) {
     return axiosInstance.post(`cart-count.php`, data);
 }
+
+export function fetchCart(data) {
+    return axiosInstance.post(`fetch-cart.php`, data);
+}

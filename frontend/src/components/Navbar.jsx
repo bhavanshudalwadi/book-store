@@ -129,9 +129,12 @@ const Navbar = (props) => {
                                     :''
                                 }
                                 <IconButton aria-label="cart" size="large">
-                                    <Badge badgeContent={cartCount} color="error">
-                                        <ShoppingCartIcon htmlColor='#fff' fontSize="inherit" />
-                                    </Badge>
+                                    {cartCount > 0?
+                                        <Badge badgeContent={cartCount} color="error">
+                                            <ShoppingCartIcon htmlColor='#fff' fontSize="inherit" onClick={() => navigate('/cart')} />
+                                        </Badge>
+                                        :<ShoppingCartIcon htmlColor='#fff' fontSize="inherit" />
+                                    }
                                 </IconButton>
                                 {user != null ?
                                 <>

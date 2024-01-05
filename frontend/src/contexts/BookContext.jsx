@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "./GlobalContext";
 import { createBook, deleteBook, fetchBooks, fetchBook, updateBook, fetchHomeBooks, addOrRemoveWishlist, addOrUpdateOrRemoveCart } from "../API";
 import { useUserContext } from "./UserContext";
+import { useCartContext } from "./CartContext";
 
 const bookContext = createContext();
 
@@ -10,6 +11,7 @@ export const BookState = ({ children }) => {
     const navigate = useNavigate();
     const { setAlert, setLoading, dialog, setDialog } = useGlobalContext();
     const { user } = useUserContext();
+    const { getCartCount } = useCartContext();
 
     const [books, setBooks] = useState([]);
     const [homeBooks, setHomeBooks] = useState([]);
@@ -194,6 +196,7 @@ export const BookState = ({ children }) => {
                 if(res.data.success) {
                     setAlert({ type: "success", msg: res.data.msg });
                     getHomeBooks();
+                    getCartCount();
                 }else {
                     setAlert({ type: "error", msg: res.data.msg });
                 }
